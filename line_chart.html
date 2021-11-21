@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-  <script src="data.js"></script>
-  <script src="config.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <title>My Chart.js Chart</title>
 </head>
@@ -19,7 +18,9 @@
   <script>
     let ctx = document.getElementById('myChart').getContext('2d');
 
-    let myChart = new Chart(ctx, {
+  function get_json() {
+      $.getJSON("data.json", function(data){
+              let myChart = new Chart(ctx, {
       type:'line', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
       data:{
         labels: data['original']['x'],
@@ -57,6 +58,7 @@
       }
     });
 
+
     function zoomIn() {
 
         myChart.data.labels = data['original']['x'].slice(data['left_index'], data['right_index' + 1]);
@@ -64,7 +66,14 @@
         myChart.update();
         document.getElementById('myText').innerHTML = data['text'];
     }
-    setTimeout(zoomIn, data['timeout']*1000);
+    setTimeout(zoomIn, 2000);
+
+      }).fail(function(){
+          console.log("An error has occurred.");
+      });
+  }
+
+  get_json()
   </script>
 </body>
 </html>
